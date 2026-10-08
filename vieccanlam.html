@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Việc cần làm</title>
+<style>
+  :root {
+    --bg: #111318;
+    --panel: #181b22;
+    --line: #262a33;
+    --text: #e6e8ee;
+    --dim: #8a91a0;
+    --accent: #4f8cff;
+    --danger: #ff5c5c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: start center;
+    padding: 48px 16px;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .app {
+    width: 100%;
+    max-width: 560px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  h1 {
+    margin: 0 0 16px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .row { display: flex; gap: 8px; }
+  input[type="text"] {
+    flex: 1;
+    background: #0f1116;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 10px 12px;
+    font: inherit;
+    outline: none;
+  }
+  input[type="text"]:focus { border-color: var(--accent); }
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  button:hover { filter: brightness(1.1); }
+  button.ghost {
+    background: transparent;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    font-weight: 400;
+  }
+  button.ghost:hover { color: var(--text); border-color: var(--dim); }
+  ul { list-style: none; margin: 16px 0 0; padding: 0; }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  li:last-child { border-bottom: 0; }
+  li input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex: none;
+  }
+  li .label {
+    flex: 1;
+    word-break: break-word;
+    cursor: pointer;
+  }
+  li.done .label {
+    color: var(--dim);
+    text-decoration: line-through;
+  }
+  li .del {
+    background: transparent;
+    border: 0;
+    color: var(--dim);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 6px;
+  }
+  li .del:hover { color: var(--danger); background: rgba(255,92,92,0.1); }
+  li .edit {
+    flex: 1;
+    background: #0f1116;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 6px 8px;
+    font: inherit;
+    outline: none;
+  }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+    font-size: 13px;
+  }
+  .filters { display: flex; gap: 4px; }
+  .filters button {
+    background: transparent;
+    color: var(--dim);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .filters button.active {
+    color: var(--text);
+    border-color: var(--line);
+    background: #0f1116;
+  }
+  .empty {
+    text-align: center;
+    color: var(--dim);
+    padding: 24px 0 8px;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Việc cần làm</h1>
+  <div class="row">
+    <input id="new" type="text" placeholder="Hôm nay bạn làm gì?" autocomplete="off">
+    <button id="add">Thêm</button>
+  </div>
+  <ul id="list"></ul>
+  <div class="footer">
+    <span id="count">0 left</span>
+    <div class="filters" id="filters">
+      <button data-filter="all">Tất cả</button>
+      <button data-filter="active">Đang Làm</button>
+      <button data-filter="done">Đã Làm</button>
+    </div>
+    <button class="ghost" id="clear">Xóa</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "todo.v1";
+  var state = load();
+
+  var newInput = document.getElementById("new");
+  var addBtn = document.getElementById("add");
+  var list = document.getElementById("list");
+  var count = document.getElementById("count");
+  var filters = document.getElementById("filters");
+  var clearBtn = document.getElementById("clear");
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { items: [], filter: "all" };
+      var parsed = JSON.parse(raw);
+      return {
+        items: Array.isArray(parsed.items) ? parsed.items : [],
+        filter: parsed.filter || "all"
+      };
+    } catch (e) {
+      return { items: [], filter: "all" };
+    }
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
+  function visible() {
+    if (state.filter === "active") return state.items.filter(function (t) { return !t.done; });
+    if (state.filter === "done") return state.items.filter(function (t) { return t.done; });
+    return state.items;
+  }
+
+  function render() {
+    list.innerHTML = "";
+
+    var items = visible();
+
+    if (items.length === 0) {
+      var empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = state.items.length === 0
+        ? "Nothing here yet. Add something."
+        : "Nothing matches this filter.";
+      list.appendChild(empty);
+    }
+
+    items.forEach(function (item) {
+      var li = document.createElement("li");
+      if (item.done) li.className = "done";
+
+      var cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !!item.done;
+      cb.addEventListener("change", function () {
+        item.done = cb.checked;
+        save();
+        render();
+      });
+
+      var label = document.createElement("span");
+      label.className = "label";
+      label.textContent = item.text;
+      label.title = "Double-click to edit";
+      label.addEventListener("dblclick", function () {
+        startEdit(li, item);
+      });
+
+      var del = document.createElement("button");
+      del.className = "del";
+      del.type = "button";
+      del.textContent = "\u00d7";
+      del.title = "Delete";
+      del.addEventListener("click", function () {
+        state.items = state.items.filter(function (t) { return t.id !== item.id; });
+        save();
+        render();
+      });
+
+      li.appendChild(cb);
+      li.appendChild(label);
+      li.appendChild(del);
+      list.appendChild(li);
+    });
+
+    var left = state.items.filter(function (t) { return !t.done; }).length;
+    count.textContent = left + (left === 1 ? " left" : " left");
+
+    Array.prototype.forEach.call(filters.children, function (btn) {
+      btn.classList.toggle("active", btn.dataset.filter === state.filter);
+    });
+  }
+
+  function startEdit(li, item) {
+    var input = document.createElement("input");
+    input.type = "text";
+    input.className = "edit";
+    input.value = item.text;
+
+    var label = li.querySelector(".label");
+    var del = li.querySelector(".del");
+    li.replaceChild(input, label);
+    li.removeChild(del);
+    input.focus();
+    input.select();
+
+    function commit() {
+      var v = input.value.trim();
+      if (v) item.text = v;
+      else state.items = state.items.filter(function (t) { return t.id !== item.id; });
+      save();
+      render();
+    }
+    function cancel() {
+      render();
+    }
+
+    input.addEventListener("blur", commit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); commit(); }
+      if (e.key === "Escape") { e.preventDefault(); cancel(); }
+    });
+  }
+
+  function add() {
+    var v = newInput.value.trim();
+    if (!v) return;
+    state.items.push({ id: uid(), text: v, done: false });
+    newInput.value = "";
+    save();
+    render();
+    newInput.focus();
+  }
+
+  addBtn.addEventListener("click", add);
+  newInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") add();
+  });
+
+  filters.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-filter]");
+    if (!btn) return;
+    state.filter = btn.dataset.filter;
+    save();
+    render();
+  });
+
+  clearBtn.addEventListener("click", function () {
+    state.items = state.items.filter(function (t) { return !t.done; });
+    save();
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
