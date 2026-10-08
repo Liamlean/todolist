@@ -3,148 +3,393 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Việc cần làm</title>
+<title>Việc Cần Làm ✨</title>
 <style>
   :root {
-    --bg: #111318;
-    --panel: #181b22;
-    --line: #262a33;
-    --text: #e6e8ee;
-    --dim: #8a91a0;
-    --accent: #4f8cff;
-    --danger: #ff5c5c;
+    --bg1: #ffd6e8;
+    --bg2: #d6e4ff;
+    --bg3: #ffe9c7;
+    --panel: #ffffff;
+    --panel-soft: #faf8ff;
+    --panel-soft-hover: #f3efff;
+    --text: #2b2340;
+    --dim: #7a7290;
+    --line: #ece8f5;
+    --input-bg: #f7f5fb;
+    --input-bg-focus: #ffffff;
+    --placeholder: #b0aac0;
+    --accent: #ff6b9d;
+    --accent2: #7c5cff;
+    --mint: #52d9b5;
+    --danger: #ff5c7a;
+    --pri-high: #ff5c7a;
+    --pri-mid: #ffb020;
+    --pri-low: #52d9b5;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(124, 92, 255, 0.12);
+    --tab-bg: #f7f5fb;
+    --tab-active: #ffffff;
+  }
+  [data-theme="dark"] {
+    --bg1: #1a1530;
+    --bg2: #14182b;
+    --bg3: #1d1832;
+    --panel: #1e1b2e;
+    --panel-soft: #252138;
+    --panel-soft-hover: #2c2742;
+    --text: #ece9f7;
+    --dim: #9a92b8;
+    --line: #302a45;
+    --input-bg: #282341;
+    --input-bg-focus: #322c4d;
+    --placeholder: #6f688c;
+    --tab-bg: #282341;
+    --tab-active: #3a3358;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   }
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     margin: 0;
     min-height: 100vh;
     display: grid;
     place-items: start center;
-    padding: 48px 16px;
-    background: var(--bg);
+    padding: 40px 16px 60px;
+    background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);
+    background-attachment: fixed;
     color: var(--text);
-    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font: 16px/1.55 "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s ease, color 0.3s ease;
   }
   .app {
     width: 100%;
-    max-width: 560px;
+    max-width: 520px;
     background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 26px;
+    padding: 28px 24px 22px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  .app::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(255,107,157,0.25), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
   }
   h1 {
-    margin: 0 0 16px;
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    margin: 0 0 4px;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
+  .subtitle {
+    margin: 0 0 20px;
+    color: var(--dim);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .icon-btn {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 0;
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: all 0.15s ease;
+  }
+  .icon-btn:hover { background: var(--panel-soft-hover); transform: translateY(-1px); }
+
   .row { display: flex; gap: 8px; }
   input[type="text"] {
     flex: 1;
-    background: #0f1116;
-    border: 1px solid var(--line);
-    border-radius: 8px;
+    background: var(--input-bg);
+    border: 2px solid transparent;
+    border-radius: 14px;
     color: var(--text);
-    padding: 10px 12px;
+    padding: 13px 16px;
     font: inherit;
+    font-size: 15px;
     outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
   }
-  input[type="text"]:focus { border-color: var(--accent); }
-  button {
-    background: var(--accent);
+  input[type="text"]::placeholder { color: var(--placeholder); }
+  input[type="text"]:focus {
+    border-color: var(--accent);
+    background: var(--input-bg-focus);
+  }
+
+  button { font-family: inherit; }
+  .add-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
     color: #fff;
     border: 0;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font: inherit;
-    font-weight: 500;
+    border-radius: 14px;
+    padding: 0 22px;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    box-shadow: 0 6px 16px rgba(255,107,157,0.35);
   }
-  button:hover { filter: brightness(1.1); }
-  button.ghost {
-    background: transparent;
+  .add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,107,157,0.45); }
+  .add-btn:active { transform: translateY(0); }
+
+  .pri-picker {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .pri-picker .label-txt {
+    font-size: 13px;
     color: var(--dim);
-    border: 1px solid var(--line);
-    font-weight: 400;
+    font-weight: 600;
+    margin-right: 2px;
   }
-  button.ghost:hover { color: var(--text); border-color: var(--dim); }
-  ul { list-style: none; margin: 16px 0 0; padding: 0; }
+  .pri-picker button {
+    flex: 1;
+    background: var(--input-bg);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .pri-picker button:hover { background: var(--panel-soft-hover); }
+  .pri-picker button.active[data-pri="low"]  { background: rgba(82,217,181,0.18); color: var(--pri-low);  border-color: var(--pri-low); }
+  .pri-picker button.active[data-pri="mid"]  { background: rgba(255,176,32,0.18); color: var(--pri-mid);  border-color: var(--pri-mid); }
+  .pri-picker button.active[data-pri="high"] { background: rgba(255,92,122,0.18); color: var(--pri-high); border-color: var(--pri-high); }
+
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 18px 0 8px;
+    gap: 8px;
+  }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--tab-bg);
+    padding: 4px;
+    border-radius: 12px;
+    flex: 1;
+  }
+  .tabs button {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    padding: 8px 10px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tabs button.active {
+    background: var(--tab-active);
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(124,92,255,0.12);
+  }
+  .sort-btn {
+    flex: none;
+    background: var(--input-bg);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dim);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .sort-btn:hover { background: var(--panel-soft-hover); }
+  .sort-btn.on {
+    background: rgba(124,92,255,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  ul { list-style: none; margin: 12px 0 0; padding: 0; }
+
   li {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--line);
+    gap: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background: var(--panel-soft);
+    border-radius: 14px;
+    border: 2px solid transparent;
+    transition: all 0.18s ease;
+    animation: slideIn 0.25s ease both;
   }
-  li:last-child { border-bottom: 0; }
-  li input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--accent);
-    cursor: pointer;
-    flex: none;
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
   }
-  li .label {
-    flex: 1;
-    word-break: break-word;
-    cursor: pointer;
+  li:hover { background: var(--panel-soft-hover); border-color: var(--line); }
+  li.done {
+    background: rgba(82,217,181,0.10);
+    border-color: rgba(82,217,181,0.25);
   }
   li.done .label {
     color: var(--dim);
     text-decoration: line-through;
+    text-decoration-thickness: 2px;
   }
-  li .del {
+
+  .check {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    background: var(--panel);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: all 0.15s ease;
+    padding: 0;
+  }
+  .check:hover { border-color: var(--mint); transform: scale(1.08); }
+  .check.on {
+    background: var(--mint);
+    border-color: var(--mint);
+  }
+  .check.on::after {
+    content: "✓";
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .pri-dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    border: 2px solid transparent;
+  }
+  .pri-dot:hover { transform: scale(1.35); }
+  .pri-dot[data-pri="low"]  { background: var(--pri-low); }
+  .pri-dot[data-pri="mid"]  { background: var(--pri-mid); }
+  .pri-dot[data-pri="high"] { background: var(--pri-high); }
+  li.done .pri-dot { opacity: 0.45; }
+
+  .label {
+    flex: 1;
+    word-break: break-word;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+  }
+
+  .del {
+    flex: none;
     background: transparent;
     border: 0;
     color: var(--dim);
-    cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1;
-    padding: 4px 6px;
-    border-radius: 6px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
   }
-  li .del:hover { color: var(--danger); background: rgba(255,92,92,0.1); }
-  li .edit {
+  .del:hover { color: var(--danger); background: rgba(255,92,122,0.1); }
+
+  .edit {
     flex: 1;
-    background: #0f1116;
-    border: 1px solid var(--accent);
-    border-radius: 6px;
+    background: var(--input-bg-focus);
+    border: 2px solid var(--accent2);
+    border-radius: 10px;
     color: var(--text);
-    padding: 6px 8px;
+    padding: 6px 10px;
     font: inherit;
+    font-size: 15px;
     outline: none;
   }
+
+  .empty {
+    text-align: center;
+    color: var(--dim);
+    padding: 36px 16px 24px;
+    font-size: 15px;
+  }
+  .empty .big { font-size: 42px; display: block; margin-bottom: 10px; }
+  .empty .line { font-weight: 600; color: var(--text); margin-bottom: 4px; }
+
   .footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 16px;
-    padding-top: 12px;
+    margin-top: 18px;
+    padding-top: 14px;
     border-top: 1px solid var(--line);
-    color: var(--dim);
     font-size: 13px;
+    color: var(--dim);
+    font-weight: 600;
   }
-  .filters { display: flex; gap: 4px; }
-  .filters button {
+  .clear {
     background: transparent;
+    border: 0;
     color: var(--dim);
-    border: 1px solid transparent;
-    border-radius: 6px;
-    padding: 4px 10px;
     font-size: 13px;
-    font-weight: 400;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: all 0.15s ease;
   }
-  .filters button.active {
-    color: var(--text);
-    border-color: var(--line);
-    background: #0f1116;
+  .clear:hover { color: var(--danger); background: rgba(255,92,122,0.08); }
+  .clear:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 2px;
+    animation: pop 0.9s ease forwards;
   }
-  .empty {
-    text-align: center;
-    color: var(--dim);
-    padding: 24px 0 8px;
-    font-size: 13px;
+  @keyframes pop {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0.4) rotate(var(--rot)); opacity: 0; }
   }
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3XLJMSFH7W"></script>
@@ -156,21 +401,43 @@
 </script>
 </head>
 <body>
+
 <div class="app">
-  <h1>Việc cần làm</h1>
-  <div class="row">
-    <input id="new" type="text" placeholder="Hôm nay bạn làm gì?" autocomplete="off">
-    <button id="add">Thêm</button>
-  </div>
-  <ul id="list"></ul>
-  <div class="footer">
-    <span id="count">0 left</span>
-    <div class="filters" id="filters">
-      <button data-filter="all">Tất cả</button>
-      <button data-filter="active">Đang Làm</button>
-      <button data-filter="done">Đã Làm</button>
+  <div class="head">
+    <div>
+      <h1>Việc Cần Làm <span>✨</span></h1>
+      <p class="subtitle" style="margin-bottom:0">Ghi lại, làm xong, gạch bỏ. Đơn giản vậy thôi.</p>
     </div>
-    <button class="ghost" id="clear">Xóa</button>
+    <button class="icon-btn" id="theme" title="Đổi chế độ sáng/tối">🌙</button>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="row">
+      <input id="new" type="text" placeholder="Hôm nay bạn cần làm gì?" autocomplete="off" maxlength="200">
+      <button id="add" class="add-btn">Thêm</button>
+    </div>
+    <div class="pri-picker" id="priPicker">
+      <span class="label-txt">Ưu tiên:</span>
+      <button data-pri="low">Thấp</button>
+      <button data-pri="mid" class="active">Vừa</button>
+      <button data-pri="high">Cao</button>
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="tabs" id="tabs">
+      <button data-filter="all" class="active">Tất cả</button>
+      <button data-filter="active">Chưa xong</button>
+      <button data-filter="done">Đã xong</button>
+    </div>
+    <button class="sort-btn" id="sort" title="Sắp xếp theo độ ưu tiên">⇅ Ưu tiên</button>
+  </div>
+
+  <ul id="list"></ul>
+
+  <div class="footer">
+    <span id="count">0 việc còn lại</span>
+    <button class="clear" id="clear">Xoá việc đã xong</button>
   </div>
 </div>
 
@@ -178,44 +445,98 @@
 (function () {
   "use strict";
 
-  var STORAGE_KEY = "todo.v1";
+  var STORAGE_KEY = "viec-can-lam.v1";
+  var THEME_KEY   = "viec-can-lam.theme";
+  var PRIORITIES  = ["low", "mid", "high"];
+  var PRI_LABEL   = { low: "Thấp", mid: "Vừa", high: "Cao" };
+
   var state = load();
+  var currentPriority = "mid";
 
   var newInput = document.getElementById("new");
-  var addBtn = document.getElementById("add");
-  var list = document.getElementById("list");
-  var count = document.getElementById("count");
-  var filters = document.getElementById("filters");
+  var addBtn   = document.getElementById("add");
+  var list     = document.getElementById("list");
+  var count    = document.getElementById("count");
+  var tabs     = document.getElementById("tabs");
   var clearBtn = document.getElementById("clear");
+  var priPicker = document.getElementById("priPicker");
+  var sortBtn  = document.getElementById("sort");
+  var themeBtn = document.getElementById("theme");
 
+  /* ---- theme ---- */
+  function applyTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    themeBtn.textContent = t === "dark" ? "☀️" : "🌙";
+  }
+  var savedTheme = "light";
+  try { savedTheme = localStorage.getItem(THEME_KEY) || "light"; } catch (e) {}
+  applyTheme(savedTheme);
+
+  themeBtn.addEventListener("click", function () {
+    var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    applyTheme(next);
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+  });
+
+  /* ---- state ---- */
   function load() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { items: [], filter: "all" };
+      if (!raw) return { items: [], filter: "all", sortByPriority: false };
       var parsed = JSON.parse(raw);
+      var items = Array.isArray(parsed.items) ? parsed.items : [];
+      items.forEach(function (it) {
+        if (PRIORITIES.indexOf(it.priority) === -1) it.priority = "mid";
+      });
       return {
-        items: Array.isArray(parsed.items) ? parsed.items : [],
-        filter: parsed.filter || "all"
+        items: items,
+        filter: parsed.filter || "all",
+        sortByPriority: !!parsed.sortByPriority
       };
     } catch (e) {
-      return { items: [], filter: "all" };
+      return { items: [], filter: "all", sortByPriority: false };
     }
   }
 
   function save() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {}
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
   }
 
   function uid() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
 
+  function priWeight(p) {
+    return p === "high" ? 3 : p === "mid" ? 2 : 1;
+  }
+
   function visible() {
-    if (state.filter === "active") return state.items.filter(function (t) { return !t.done; });
-    if (state.filter === "done") return state.items.filter(function (t) { return t.done; });
-    return state.items;
+    var items = state.items.slice();
+    if (state.filter === "active") items = items.filter(function (t) { return !t.done; });
+    else if (state.filter === "done") items = items.filter(function (t) { return t.done; });
+    if (state.sortByPriority) {
+      items.sort(function (a, b) {
+        if (a.done !== b.done) return a.done ? 1 : -1;
+        return priWeight(b.priority) - priWeight(a.priority);
+      });
+    }
+    return items;
+  }
+
+  function burst(x, y) {
+    var colors = ["#ff6b9d", "#7c5cff", "#52d9b5", "#ffd166", "#ff8fa3"];
+    for (var i = 0; i < 14; i++) {
+      var p = document.createElement("div");
+      p.className = "confetti";
+      p.style.left = x + "px";
+      p.style.top = y + "px";
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.setProperty("--dx", (Math.random() * 160 - 80) + "px");
+      p.style.setProperty("--dy", (Math.random() * -140 - 40) + "px");
+      p.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
+      document.body.appendChild(p);
+      setTimeout(function (el) { return function () { el.remove(); }; }(p), 950);
+    }
   }
 
   function render() {
@@ -226,9 +547,13 @@
     if (items.length === 0) {
       var empty = document.createElement("div");
       empty.className = "empty";
-      empty.textContent = state.items.length === 0
-        ? "Nothing here yet. Add something."
-        : "Nothing matches this filter.";
+      if (state.items.length === 0) {
+        empty.innerHTML = '<span class="big">🌱</span><div class="line">Chưa có việc nào</div><div>Thêm việc đầu tiên đi nào!</div>';
+      } else if (state.filter === "active") {
+        empty.innerHTML = '<span class="big">🎉</span><div class="line">Xong hết rồi!</div><div>Nghỉ ngơi chút đi.</div>';
+      } else {
+        empty.innerHTML = '<span class="big">🤔</span><div class="line">Chưa có việc nào xong</div><div>Làm đi rồi quay lại.</div>';
+      }
       list.appendChild(empty);
     }
 
@@ -236,11 +561,30 @@
       var li = document.createElement("li");
       if (item.done) li.className = "done";
 
-      var cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.checked = !!item.done;
-      cb.addEventListener("change", function () {
-        item.done = cb.checked;
+      var check = document.createElement("button");
+      check.className = "check" + (item.done ? " on" : "");
+      check.type = "button";
+      check.setAttribute("aria-label", "Đánh dấu xong");
+      check.addEventListener("click", function (e) {
+        item.done = !item.done;
+        if (item.done) {
+          var r = e.currentTarget.getBoundingClientRect();
+          burst(r.left + r.width / 2, r.top + r.height / 2);
+        }
+        save();
+        render();
+      });
+
+      var dot = document.createElement("button");
+      dot.className = "pri-dot";
+      dot.type = "button";
+      dot.dataset.pri = item.priority;
+      dot.title = "Ưu tiên: " + PRI_LABEL[item.priority] + " (nhấp để đổi)";
+      dot.style.border = "none";
+      dot.style.padding = "0";
+      dot.addEventListener("click", function () {
+        var i = PRIORITIES.indexOf(item.priority);
+        item.priority = PRIORITIES[(i + 1) % PRIORITIES.length];
         save();
         render();
       });
@@ -248,34 +592,36 @@
       var label = document.createElement("span");
       label.className = "label";
       label.textContent = item.text;
-      label.title = "Double-click to edit";
-      label.addEventListener("dblclick", function () {
-        startEdit(li, item);
-      });
+      label.title = "Nhấp đúp để sửa";
+      label.addEventListener("dblclick", function () { startEdit(li, item); });
 
       var del = document.createElement("button");
       del.className = "del";
       del.type = "button";
-      del.textContent = "\u00d7";
-      del.title = "Delete";
+      del.textContent = "×";
+      del.title = "Xoá";
       del.addEventListener("click", function () {
         state.items = state.items.filter(function (t) { return t.id !== item.id; });
         save();
         render();
       });
 
-      li.appendChild(cb);
+      li.appendChild(check);
+      li.appendChild(dot);
       li.appendChild(label);
       li.appendChild(del);
       list.appendChild(li);
     });
 
     var left = state.items.filter(function (t) { return !t.done; }).length;
-    count.textContent = left + (left === 1 ? " left" : " left");
+    count.textContent = left === 0 ? "Không còn việc nào 🎉" : left + " việc còn lại";
 
-    Array.prototype.forEach.call(filters.children, function (btn) {
+    Array.prototype.forEach.call(tabs.children, function (btn) {
       btn.classList.toggle("active", btn.dataset.filter === state.filter);
     });
+
+    sortBtn.classList.toggle("on", state.sortByPriority);
+    clearBtn.disabled = !state.items.some(function (t) { return t.done; });
   }
 
   function startEdit(li, item) {
@@ -283,6 +629,7 @@
     input.type = "text";
     input.className = "edit";
     input.value = item.text;
+    input.maxLength = 200;
 
     var label = li.querySelector(".label");
     var del = li.querySelector(".del");
@@ -291,7 +638,10 @@
     input.focus();
     input.select();
 
+    var finished = false;
     function commit() {
+      if (finished) return;
+      finished = true;
       var v = input.value.trim();
       if (v) item.text = v;
       else state.items = state.items.filter(function (t) { return t.id !== item.id; });
@@ -299,12 +649,14 @@
       render();
     }
     function cancel() {
+      if (finished) return;
+      finished = true;
       render();
     }
 
     input.addEventListener("blur", commit);
     input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { e.preventDefault(); commit(); }
+      if (e.key === "Enter")  { e.preventDefault(); commit(); }
       if (e.key === "Escape") { e.preventDefault(); cancel(); }
     });
   }
@@ -312,7 +664,7 @@
   function add() {
     var v = newInput.value.trim();
     if (!v) return;
-    state.items.push({ id: uid(), text: v, done: false });
+    state.items.push({ id: uid(), text: v, done: false, priority: currentPriority });
     newInput.value = "";
     save();
     render();
@@ -324,10 +676,25 @@
     if (e.key === "Enter") add();
   });
 
-  filters.addEventListener("click", function (e) {
+  priPicker.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-pri]");
+    if (!btn) return;
+    currentPriority = btn.dataset.pri;
+    Array.prototype.forEach.call(priPicker.querySelectorAll("button[data-pri]"), function (b) {
+      b.classList.toggle("active", b === btn);
+    });
+  });
+
+  tabs.addEventListener("click", function (e) {
     var btn = e.target.closest("button[data-filter]");
     if (!btn) return;
     state.filter = btn.dataset.filter;
+    save();
+    render();
+  });
+
+  sortBtn.addEventListener("click", function () {
+    state.sortByPriority = !state.sortByPriority;
     save();
     render();
   });
